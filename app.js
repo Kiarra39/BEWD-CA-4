@@ -23,6 +23,9 @@ const User= mongoose.model('User', SchemaUser);
 
 app.post('/auth', async(req, res)=>{
     const {username, password}= req.body;
+    if(!username || !password){
+        return res.status(400).json({message:"Enter username and password"});
+    }
     let user= await User.findOne({username});
     if(!user){
         const pass_hasdhed= await bcrypt.hash(password, 10);
@@ -48,6 +51,6 @@ app.get('/logout', (req,res)=>{
 })
 
 const PORT=5000;
-app.listen (()=>{
+app.listen (PORT,()=>{
     console.log(`Server is running on port ${PORT}`);
 })
